@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="account"
-            type="com.yassir.show.model.data.Account" />
+            name="user"
+            type="com.yassir.show.model.data.UserResponse" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -33,7 +33,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="50dp">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="150dp"
@@ -54,25 +57,50 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:fontFamily="@font/bold"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="@{account.username}"
+                    android:text="@{user.name}"
                     android:textColor="@color/white_100"
                     android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/permission_shape_wait_background"
                     android:backgroundTint="@color/white_20"
                     android:fontFamily="@font/medium"
+                    android:gravity="center"
                     android:includeFontPadding="false"
                     android:paddingStart="5dp"
                     android:paddingTop="5dp"
                     android:paddingEnd="5dp"
                     android:paddingBottom="4dp"
-                    android:text="@{account.pack}"
+                    android:text="@{user.login}"
                     android:textColor="@color/white_100"
                     android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/regular"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@{user.bio}"
+                    android:textColor="@color/white_100"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/regular"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@{user.location}"
+                    android:textColor="@color/white_100"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
