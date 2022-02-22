@@ -3,6 +3,7 @@ package com.yassir.show.viwmodel.activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yassir.show.model.repository.API
 import com.yassir.show.model.data.CreditResponse
 import com.yassir.show.model.data.MovieListResponse
@@ -21,23 +22,26 @@ class DetailsViewModel : ViewModel() {
 
     // ------------------------------
     fun movie(id:Int): LiveData<MovieResponse> {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = API.MOVIE.details(id).execute().body() ?: MovieResponse()
-            withContext(Dispatchers.Main) { movie.postValue(response) }
+        viewModelScope.launch {
+            var response:MovieResponse
+            withContext(Dispatchers.IO) { response = API.MOVIE.details(id).execute().body() ?: MovieResponse() }
+            movie.value = response
         }
         return movie
     }
     fun cast(id:Int): LiveData<List<CreditResponse.Cast>> {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = API.MOVIE.credits(id).execute().body()?.cast ?: listOf()
-            withContext(Dispatchers.Main) { cast.value = response }
+        viewModelScope.launch {
+            var response:List<CreditResponse.Cast>
+            withContext(Dispatchers.IO) { response = API.MOVIE.credits(id).execute().body()?.cast ?: listOf()}
+            cast.value = response
         }
         return cast
     }
     fun recommendations(id:Int): LiveData<List<MovieListResponse.Movie>> {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = API.MOVIE.recommendations(id).execute().body()?.results ?: listOf()
-            withContext(Dispatchers.Main) { recommendations.value = response }
+        viewModelScope.launch {
+            var response:List<MovieListResponse.Movie>
+            withContext(Dispatchers.IO) { response = API.MOVIE.recommendations(id).execute().body()?.results ?: listOf()}
+            recommendations.value = response
         }
         return recommendations
     }

@@ -3,6 +3,7 @@ package com.yassir.show.viwmodel.fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yassir.show.model.repository.API
 import com.yassir.show.model.data.MovieListResponse
 import kotlinx.coroutines.*
@@ -15,15 +16,20 @@ class HomeViewModel : ViewModel() {
     private val upcoming = MutableLiveData<List<MovieListResponse.Movie>>()
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            val popularBody = API.MOVIE.popular().execute().body()
-            val topRatedBody = API.MOVIE.topRated().execute().body()
-            val upcomingBody = API.MOVIE.upcoming().execute().body()
-            withContext(Dispatchers.Main) {
-                popularBody?.apply { popular.value   = this.results }
-                topRatedBody?.apply { topRated.value = this.results }
-                upcomingBody?.apply { upcoming.value = this.results }
+        viewModelScope.launch {
+            val popularList  : ArrayList<MovieListResponse.Movie> = arrayListOf()
+            val topRatedList : ArrayList<MovieListResponse.Movie> = arrayListOf()
+            val upcomingList : ArrayList<MovieListResponse.Movie> = arrayListOf()
+
+            withContext(Dispatchers.IO){
+                popularList.addAll(API.MOVIE.popular().execute().body()?.results ?: listOf())
+                topRatedList.addAll(API.MOVIE.topRated().execute().body()?.results ?: listOf())
+                upcomingList.addAll(API.MOVIE.upcoming().execute().body()?.results ?: listOf())
             }
+
+            popular.value  = popularList
+            topRated.value = topRatedList
+            upcoming.value = upcomingList
         }
     }
 
